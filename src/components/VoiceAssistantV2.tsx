@@ -3,6 +3,8 @@ import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 import ChatBox from './ChatBox';
 import { orchestratorService } from '../services/OrchestratorService';
 
+import debounce from 'lodash.debounce';
+
 export const VoiceAssistantV2: React.FC = () => {
   const conversationId = 'demo-convo'; // static for now, could be dynamic
   const [messages, setMessages] = useState<{ role: 'user' | 'assistant' | 'system'; content: string; timestamp?: number }[]>([]);
@@ -25,7 +27,7 @@ export const VoiceAssistantV2: React.FC = () => {
     };
   }, []);
 
-  const handleSend = () => {
+  const handleSendImmediate = () => {
     if (!inputText.trim()) return;
     setMessages(prev => [...prev, { role: 'user', content: inputText.trim(), timestamp: Date.now() }]);
     try {
@@ -36,6 +38,8 @@ export const VoiceAssistantV2: React.FC = () => {
     }
     setInputText('');
   };
+
+  const handleSend = debounce(handleSendImmediate, 500, { leading: true, trailing: false });
 
   const {
     listening,

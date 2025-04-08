@@ -34,6 +34,8 @@ import {
   VolumeIcon
 } from 'lucide-react';
 
+import { ThreatDetection } from './ThreatDetection';
+
 export function Tools() {
   const [activeTab, setActiveTab] = useState('interview');
   const { speak, speaking, stop } = useSimulatedTTS();
@@ -261,17 +263,11 @@ export function Tools() {
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-5 mb-4 bg-black/50 border border-blue-900/30 p-1 rounded-lg">
+        <TabsList className="grid grid-cols-6 mb-4 bg-black/50 border border-blue-900/30 p-1 rounded-lg">
           <TabsTrigger value="interview" className="data-[state=active]:bg-blue-900/40 data-[state=active]:text-blue-300">
             <div className="flex items-center gap-1">
               <UserIcon className="h-4 w-4" />
               <span className="text-xs">Field Interview</span>
-            </div>
-          </TabsTrigger>
-          <TabsTrigger value="reports" className="data-[state=active]:bg-blue-900/40 data-[state=active]:text-blue-300">
-            <div className="flex items-center gap-1">
-              <FileTextIcon className="h-4 w-4" />
-              <span className="text-xs">Reports</span>
             </div>
           </TabsTrigger>
           <TabsTrigger value="lookup" className="data-[state=active]:bg-blue-900/40 data-[state=active]:text-blue-300">
@@ -292,6 +288,12 @@ export function Tools() {
               <span className="text-xs">Voice Test</span>
             </div>
           </TabsTrigger>
+        <TabsTrigger value="threats" className="data-[state=active]:bg-blue-900/40 data-[state=active]:text-blue-300">
+          <div className="flex items-center gap-1">
+            <ShieldIcon className="h-4 w-4" />
+            <span className="text-xs">Threat Detection</span>
+          </div>
+        </TabsTrigger>
         </TabsList>
         
         {/* Field Interview Tab */}
@@ -697,6 +699,13 @@ export function Tools() {
             </CardContent>
           </Card>
         </TabsContent>
+        {/* Threat Detection Tab */}
+        <TabsContent value="threats" className="space-y-4 mt-0">
+          <div className="bg-blue-950/10 border border-blue-900/30 rounded-lg p-4">
+            <ThreatDetection />
+          </div>
+        </TabsContent>
+
       </Tabs>
     </div>
   );

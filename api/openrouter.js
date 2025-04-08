@@ -5,10 +5,10 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { reportText } = req.body;
+  const { model, messages } = req.body;
 
-  if (!reportText) {
-    return res.status(400).json({ error: 'Missing reportText' });
+  if (!model || !messages) {
+    return res.status(400).json({ error: 'Missing model or messages' });
   }
 
   try {
@@ -19,13 +19,8 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.VITE_OPENROUTER_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'quasar-alpha',
-        messages: [
-          {
-            role: 'user',
-            content: `Please review this report and provide feedback:\n\n${reportText}`
-          }
-        ]
+        model,
+        messages
       })
     });
 

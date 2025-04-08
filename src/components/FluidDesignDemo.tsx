@@ -59,11 +59,11 @@ export function FluidDesignDemo() {
               </button>
               <button 
                 className={`w-full text-left p-3 rounded-lg transition flex items-center ${
-                  activeTab === 'threats' 
-                    ? 'le-blue-accent' 
+                  activeTab === 'reports'
+                    ? 'le-blue-accent'
                     : 'hover:bg-white/60'
                 }`}
-                onClick={() => setActiveTab('threats')}
+                onClick={() => setActiveTab('reports')}
               >
                 <ShieldIcon className="h-4 w-4 mr-3" />
                 Threat Detection
@@ -111,7 +111,7 @@ export function FluidDesignDemo() {
         <div className="md:col-span-2">
           <div className="fluid-card p-6 mb-6">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="fluid-heading text-xl">Threat Assessment</h2>
+              <h2 className="fluid-heading text-xl">Reports</h2>
               <Badge className="bg-green-500">Normal</Badge>
             </div>
             

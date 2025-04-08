@@ -229,16 +229,16 @@ function App({ initialTab = 'voice' }: AppProps) {
                   <span className="text-sm font-medium">Statutes</span>
                 </div>
               </TabsTrigger>
-              <TabsTrigger 
-                value="threats" 
+              <TabsTrigger
+                value="reports"
                 className="flex-1 rounded-full py-3 data-[state=active]:bg-gradient-to-r data-[state=active]:from-[#003087] data-[state=active]:to-[#004db3] data-[state=active]:text-white text-muted-foreground font-medium transition-all duration-300 hover:text-foreground focus-ring hover:bg-white/70 data-[state=active]:shadow-md"
-                style={{ color: activeTab === 'threats' ? 'white' : 'inherit' }}
+                style={{ color: activeTab === 'reports' ? 'white' : 'inherit' }}
               >
                 <div className="flex items-center justify-center gap-2 w-full">
                   <div className="bg-white/20 rounded-full p-1.5 shadow-inner">
-                    <AlertTriangleIcon className="h-4 w-4" />
+                    <FileTextIcon className="h-4 w-4" />
                   </div>
-                  <span className="text-sm font-medium">Threats</span>
+                  <span className="text-sm font-medium">Reports</span>
                 </div>
               </TabsTrigger>
               <TabsTrigger 
@@ -290,9 +290,18 @@ function App({ initialTab = 'voice' }: AppProps) {
                 </Suspense>
               </TabsContent>
 
-              <TabsContent value="threats" className="focus-visible:outline-none focus-visible:ring-0 m-0 animate-in fade-in-50 data-[state=inactive]:animate-out data-[state=inactive]:fade-out-0 data-[state=active]:duration-300">
-                <Suspense fallback={<div className="p-8 text-center">Loading Threat Detection...</div>}>
-                  <ThreatDetection />
+              <TabsContent value="reports" className="focus-visible:outline-none focus-visible:ring-0 m-0 animate-in fade-in-50 data-[state=inactive]:animate-out data-[state=inactive]:fade-out-0 data-[state=active]:duration-300">
+                <Suspense fallback={<div className="p-8 text-center">Loading Report Assistant...</div>}>
+                  <div className="rounded-lg border border-blue-900/50 bg-blue-950/10 p-4 mb-6">
+                    <h3 className="text-lg font-semibold mb-2 text-blue-300 flex items-center gap-2">
+                      <FileTextIcon className="h-5 w-5" />
+                      Report Assistant
+                    </h3>
+                    <p className="text-blue-400/70 text-sm mb-4">
+                      Review, edit, and improve your reports with AI assistance.
+                    </p>
+                    <ReportAssistant />
+                  </div>
                 </Suspense>
               </TabsContent>
               
@@ -300,16 +309,6 @@ function App({ initialTab = 'voice' }: AppProps) {
                 <Suspense fallback={<div className="p-8 text-center">Loading Tools...</div>}>
                   <Tools />
                   <div className="mt-6">
-                    <div className="rounded-lg border border-blue-900/50 bg-blue-950/10 p-4 mb-6">
-                      <h3 className="text-lg font-semibold mb-2 text-blue-300 flex items-center gap-2">
-                        <FileTextIcon className="h-5 w-5" />
-                        Report Assistant
-                      </h3>
-                      <p className="text-blue-400/70 text-sm mb-4">
-                        Review, edit, and improve your reports with AI assistance.
-                      </p>
-                      <ReportAssistant />
-                    </div>
                   </div>
                 </Suspense>
               </TabsContent>
