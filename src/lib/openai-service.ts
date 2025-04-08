@@ -83,3 +83,18 @@ As LARK, assess the following tactical situation and provide concise, actionable
     { role: 'user', content: prompt }
   ]);
 }
+
+export async function getLegalInformation(statute: string): Promise<string> {
+  const prompt = `
+As LARK, a Louisiana legal assistant, provide a brief explanation of the following statute:
+
+"${statute}"
+
+If it is not a valid Louisiana statute, say so.
+`;
+
+  return getChatCompletion([
+    { role: 'system', content: 'You are LARK, a Louisiana legal assistant.' },
+    { role: 'user', content: prompt }
+  ]);
+}
