@@ -326,9 +326,8 @@ function App({ initialTab = 'voice' }: AppProps) {
                         <div className="p-4 border-b border-border/60 bg-muted/30">
                           <h3 className="text-lg font-semibold flex items-center gap-2">
                             <VolumeUpIcon className="h-5 w-5 text-primary" />
-                            Voice System Test
                           </h3>
-                          <p className="text-sm text-muted-foreground mt-1">Test the LiveKit voice synthesis system</p>
+                         
                         </div>
                         <div className="p-4">
                           {process.env.NODE_ENV !== 'production' && (

@@ -292,9 +292,6 @@ export function Settings() {
                 </p>
               </div>
 
-              <Button onClick={testVoiceSettings} className="mb-6">
-                Test Voice Settings
-              </Button>
               
               {/* LiveKit Voice Test section has been removed as requested */}
             </CardContent>

@@ -22,8 +22,8 @@ const languages = {
 
 const languageVoices = {
   english: 'ash',
+  french: 'fr-FR',
   spanish: 'es_voice',
-  french: 'fr_voice',
   vietnamese: 'vi_voice',
   mandarin: 'zh_voice',
   arabic: 'ar_voice'
@@ -32,10 +32,10 @@ const languageVoices = {
 // Complete Miranda Rights text according to Louisiana statutes (La. R.S. 15:451)
 const mirandaText = {
   english: "You have the right to remain silent. Anything you say can and will be used against you in a court of law. You have the right to an attorney. If you cannot afford an attorney, one will be provided for you. Do you understand the rights I have just read to you? With these rights in mind, do you wish to speak to me?",
+  french: "Vous avez le droit de garder le silence. Tout ce que vous direz pourra être utilisé contre vous devant un tribunal. Vous avez le droit à un avocat. Si vous n'avez pas les moyens d'en avoir un, un avocat vous sera fourni. Avez-vous compris les droits que je viens de vous lire ? Compte tenu de ces droits, souhaitez-vous me parler ?",
   
   spanish: "Tiene derecho a guardar silencio. Cualquier cosa que diga puede y será usada en su contra en un tribunal. Tiene derecho a un abogado. Si no puede pagar un abogado, se le proporcionará uno. ¿Entiende los derechos que le acabo de leer? Con estos derechos en mente, ¿desea hablar conmigo?",
   
-  french: "Vous avez le droit de garder le silence. Tout ce que vous direz pourra être et sera utilisé contre vous devant un tribunal. Vous avez le droit à un avocat. Si vous ne pouvez pas vous permettre un avocat, un avocat vous sera fourni. Comprenez-vous les droits que je viens de vous lire? Avec ces droits à l'esprit, souhaitez-vous me parler?",
   
   vietnamese: "Bạn có quyền giữ im lặng. Bất cứ điều gì bạn nói có thể và sẽ được sử dụng chống lại bạn tại tòa án. Bạn có quyền có luật sư. Nếu bạn không có khả năng chi trả cho luật sư, một luật sư sẽ được cung cấp cho bạn. Bạn có hiểu các quyền tôi vừa đọc cho bạn không? Với những quyền này trong tâm trí, bạn có muốn nói chuyện với tôi không?",
   

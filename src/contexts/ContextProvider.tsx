@@ -11,6 +11,7 @@ interface ContextData {
   ongoingTasks: Array<{ id: string; description: string; status: string }>;
   setOngoingTasks: React.Dispatch<React.SetStateAction<Array<{ id: string; description: string; status: string }>>>;
   geoPermissionDenied?: boolean;
+  officerDisplayName: string;
 }
 
 const Context = createContext<ContextData>({
@@ -23,6 +24,7 @@ const Context = createContext<ContextData>({
   setPreferences: () => {},
   ongoingTasks: [],
   setOngoingTasks: () => {},
+  officerDisplayName: '',
 });
 
 export const useLarkContext = () => useContext(Context);
@@ -37,13 +39,15 @@ export const ContextProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [preferences, setPreferences] = useState<Record<string, any>>({});
   const [ongoingTasks, setOngoingTasks] = useState<Array<{ id: string; description: string; status: string }>>([]);
 
+  const [officerDisplayName, setOfficerDisplayName] = useState<string>('');
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const coords = pos.coords;
         setLocation(`Lat: ${coords.latitude.toFixed(4)}, Lon: ${coords.longitude.toFixed(4)}`);
       },
-      (err) => {
+      (err: GeolocationPositionError) => {
         if (err.code === 1) { // PERMISSION_DENIED
           setGeoPermissionDenied(true);
         }
@@ -55,7 +59,19 @@ export const ContextProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setTime(new Date().toLocaleString());
     }, 1000);
 
-    return () => clearInterval(interval);
+    const handleProfileUpdate = (event: Event) => {
+      const detail = (event as CustomEvent).detail;
+      if (detail?.displayName) {
+        setOfficerDisplayName(detail.displayName);
+      }
+    };
+
+    document.addEventListener('officerProfileUpdated', handleProfileUpdate);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('officerProfileUpdated', handleProfileUpdate);
+    };
   }, []);
 
   return (
@@ -69,7 +85,8 @@ export const ContextProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setPreferences,
       ongoingTasks,
       setOngoingTasks,
-      geoPermissionDenied
+      geoPermissionDenied,
+      officerDisplayName
     }}>
       {children}
     </Context.Provider>
