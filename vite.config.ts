@@ -59,8 +59,6 @@ export default defineConfig({
     rollupOptions: {
       // Properly handle external dependencies
       external: [
-        './server.js',
-        './api-server.js',
         './server/routes/**',
         './src/database/**'
       ],
