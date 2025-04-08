@@ -25,7 +25,7 @@ export function useLarkAgent(): UseLarkAgentResult {
     setMessages(newMessages);
 
     try {
-      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      const response = await fetch('/api/openrouter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

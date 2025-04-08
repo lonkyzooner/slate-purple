@@ -10,6 +10,7 @@ interface ContextData {
   setPreferences: React.Dispatch<React.SetStateAction<Record<string, any>>>;
   ongoingTasks: Array<{ id: string; description: string; status: string }>;
   setOngoingTasks: React.Dispatch<React.SetStateAction<Array<{ id: string; description: string; status: string }>>>;
+  geoPermissionDenied?: boolean;
 }
 
 const Context = createContext<ContextData>({
@@ -30,6 +31,7 @@ export const ContextProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [location, setLocation] = useState<string | null>(null);
   const [caseNumber, setCaseNumber] = useState<string | null>(null);
   const [time, setTime] = useState<string>(new Date().toLocaleString());
+  const [geoPermissionDenied, setGeoPermissionDenied] = useState(false);
 
   const [conversationHistory, setConversationHistory] = useState<Array<{ role: string; content: string; timestamp: number }>>([]);
   const [preferences, setPreferences] = useState<Record<string, any>>({});
@@ -41,7 +43,12 @@ export const ContextProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const coords = pos.coords;
         setLocation(`Lat: ${coords.latitude.toFixed(4)}, Lon: ${coords.longitude.toFixed(4)}`);
       },
-      () => setLocation('Location unavailable')
+      (err) => {
+        if (err.code === 1) { // PERMISSION_DENIED
+          setGeoPermissionDenied(true);
+        }
+        setLocation('Location unavailable');
+      }
     );
 
     const interval = setInterval(() => {
@@ -61,7 +68,8 @@ export const ContextProvider: React.FC<{ children: React.ReactNode }> = ({ child
       preferences,
       setPreferences,
       ongoingTasks,
-      setOngoingTasks
+      setOngoingTasks,
+      geoPermissionDenied
     }}>
       {children}
     </Context.Provider>

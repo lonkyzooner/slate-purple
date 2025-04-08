@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import AuthContext, { AuthContextType } from '../contexts/AuthContext';
 
 const ReportAssistant: React.FC = () => {
   const [reportText, setReportText] = useState('');
@@ -15,20 +16,34 @@ const ReportAssistant: React.FC = () => {
   }, [savedReports]);
   const editorRef = useRef<HTMLDivElement>(null);
 
+  const { getAccessToken } = useContext(AuthContext) as AuthContextType;
+
   const handleReview = async () => {
     setLoading(true);
     setFeedback(null);
     try {
+      const token = await getAccessToken();
       const response = await fetch('/api/openrouter', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
         body: JSON.stringify({
           reportText
         }),
       });
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        data = {};
+      }
+      if (!response.ok) {
+        console.error('API error:', response.status, data);
+        setFeedback('Error reviewing report.');
+        return;
+      }
       const feedback = data.choices?.[0]?.message?.content;
       setFeedback(feedback || 'No feedback generated.');
     } catch (err) {
@@ -55,7 +70,7 @@ const ReportAssistant: React.FC = () => {
             onClick={async () => {
               setLoading(true);
               try {
-                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                const response = await fetch('/api/openrouter', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
@@ -203,7 +218,7 @@ const ReportAssistant: React.FC = () => {
             setLoading(true);
             setFeedback(null);
             try {
-              const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+              const response = await fetch('/api/openrouter', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -231,7 +246,17 @@ ${reportText}`
                   ]
                 }),
               });
-              const data = await response.json();
+              let data;
+              try {
+                data = await response.json();
+              } catch {
+                data = {};
+              }
+              if (!response.ok) {
+                console.error('API error:', response.status, data);
+                setFeedback('Error reviewing report.');
+                return;
+              }
               console.log('OpenRouter API response:', data);
               const feedback = data.choices?.[0]?.message?.content;
               if (editorRef.current) {

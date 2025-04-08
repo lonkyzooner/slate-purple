@@ -13,6 +13,8 @@ const User = require('./src/database/models/User');
 const Subscription = require('./src/database/models/Subscription');
 const UsageLog = require('./src/database/models/UsageLog');
 
+const openrouterHandler = require('./api/openrouter.js');
+ 
 // Create Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,6 +22,9 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+
+app.use(require('./server/routes/mirandaLog'));
+app.use(require('./server/routes/translate'));
 
 // Add security headers
 app.use(helmet({
@@ -68,6 +73,9 @@ app.use('/api/webhook', bodyParser.raw({ type: 'application/json' }));
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // ===== API ROUTES =====
+
+// Proxy to OpenRouter API
+app.post('/api/openrouter', openrouterHandler);
 
 // Create checkout session
 app.post('/api/create-checkout-session', async (req, res) => {

@@ -26,7 +26,7 @@ export interface UserProfile {
   metadata: Record<string, any>;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   user: UserProfile | null;

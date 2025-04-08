@@ -52,6 +52,7 @@ interface AppProps {
 
 function App({ initialTab = 'voice' }: AppProps) {
   const [activeTab, setActiveTab] = useState<string>(initialTab);
+  const [messages, setMessages] = useState<import('./components/ChatBox').ChatMessage[]>([]);
   // Fluid design is now the default and only design
   // Removed unused variable: const [showVoiceTest, setShowVoiceTest] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -272,7 +273,7 @@ function App({ initialTab = 'voice' }: AppProps) {
                   <Suspense fallback={<div className="p-8 text-center">Loading voice assistant...</div>}>
                     <div className="flex flex-col gap-4">
                       {/* <VoiceAssistantV2 /> */}
-                      <ChatBox />
+                      <ChatBox messages={messages} setMessages={setMessages} isSpeaking={false} />
                     </div>
                   </Suspense>
               </TabsContent>

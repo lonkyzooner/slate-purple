@@ -1,0 +1,47 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Lint code
+      run: npm run lint
+
+    - name: Run unit tests
+      run: npm test
+
+    - name: Build app
+      run: npm run build
+
+    - name: Start server for e2e tests
+      run: npm start &
+      env:
+        NODE_ENV: production
+
+    - name: Wait for server to be ready
+      run: npx wait-on http://localhost:3000
+
+    - name: Run Cypress e2e tests
+      run: npm run cy:run
+
+    # Optional deploy step placeholder
+    # - name: Deploy
+    #   run: echo "Deploying..."

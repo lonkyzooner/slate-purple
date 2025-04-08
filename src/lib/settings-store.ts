@@ -68,7 +68,7 @@ const saveOfficerNameToAllStorages = (name: string) => {
     
     // Try to save to IndexedDB if available (for future offline capability)
     try {
-      const db = window.indexedDB.open('lark-db', 3);
+      const db = window.indexedDB.open('lark-db', 4);
       db.onsuccess = (event) => {
         const database = (event.target as IDBOpenDBRequest).result;
         const transaction = database.transaction(['settings'], 'readwrite');
@@ -222,7 +222,7 @@ export const useSettings = create(
           
           // Initialize IndexedDB for settings if needed
           try {
-            const request = window.indexedDB.open('lark-db', 3);
+            const request = window.indexedDB.open('lark-db', 4);
             request.onupgradeneeded = (event) => {
               const db = (event.target as IDBOpenDBRequest).result;
               if (!db.objectStoreNames.contains('settings')) {

@@ -3,7 +3,7 @@ import { UserIcon, BotIcon, SendIcon, MicIcon } from 'lucide-react';
 import { orchestratorService } from '../services/OrchestratorService';
 import { voiceSynthesisService } from '../services/voice/VoiceSynthesisService';
 
-interface ChatMessage {
+export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
   timestamp?: number;
@@ -11,19 +11,14 @@ interface ChatMessage {
 
 interface ChatBoxProps {
   onMicClick?: () => void;
-  isSpeaking?: boolean;
-  messages?: ChatMessage[];
-  setMessages?: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
+  isSpeaking: boolean;
+  messages: ChatMessage[];
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>;
   sendMessage?: (text: string) => void;
 }
 
-const ChatBox: React.FC = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>(() => {
-    const saved = localStorage.getItem('lark_chat_history');
-    return saved ? JSON.parse(saved) : [];
-  });
+const ChatBox: React.FC<ChatBoxProps> = ({ messages, onMicClick, isSpeaking, setMessages, sendMessage }) => {
   const [inputText, setInputText] = useState('');
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -75,11 +70,9 @@ const ChatBox: React.FC = () => {
 
         recognitionRef.current.onerror = (event: any) => {
           console.error('Speech recognition error', event);
-          setIsSpeaking(false);
         };
 
         recognitionRef.current.onend = () => {
-          setIsSpeaking(false);
         };
       }
     }
@@ -88,12 +81,10 @@ const ChatBox: React.FC = () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
-      setIsSpeaking(false);
     } else {
       if (recognitionRef.current) {
         recognitionRef.current.start();
       }
-      setIsSpeaking(true);
     }
   };
 
