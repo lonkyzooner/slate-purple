@@ -25,13 +25,14 @@ export function useLarkAgent(): UseLarkAgentResult {
     setMessages(newMessages);
 
     try {
-      const response = await fetch('/api/openrouter', {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
         },
         body: JSON.stringify({
-          model: 'openrouter/quasar-alpha',
+          model: 'gpt-3.5-turbo',
           messages: newMessages.map(m => ({ role: m.role, content: m.content }))
         }),
       });
