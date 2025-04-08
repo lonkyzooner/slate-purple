@@ -58,7 +58,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       // Properly handle external dependencies
-      external: [],
+      external: [
+        './server.js',
+        './api-server.js',
+        './server/routes/**',
+        './src/database/**'
+      ],
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom']
