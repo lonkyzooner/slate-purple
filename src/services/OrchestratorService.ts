@@ -4,12 +4,7 @@ import { queryPinecone } from './pineconeClient';
 import statutesData from '../data/statutes.json';
 import {
   LLMClient,
-  OpenAIClient,
-  AnthropicClient,
-  GroqClient,
-  GeminiClient,
-  CohereClient,
-  QuasarClient
+  UnifiedLLMClient
 } from './llmClients';
 import { toolManager } from './ToolManager';
 
@@ -47,26 +42,13 @@ class OrchestratorService {
   private conversationHistories: Record<string, Message[]> = {};
   private listeners: Record<string, ResponseListener[]> = {};
   private llmClient: LLMClient;
-  private anthropicClient: LLMClient;
-  private groqClient: LLMClient;
-  private geminiClient: LLMClient;
-  private cohereClient: LLMClient;
-  private quasarClient: LLMClient;
 
   private statutes: Statute[] = [];
   private mirandaLogs: Record<string, MirandaLog[]> = {};
 
   constructor() {
     console.log('[Orchestrator] Initialized');
-    this.llmClient = new OpenAIClient(import.meta.env.VITE_OPENAI_API_KEY);
-
-    // Initialize other LLM clients with placeholder API keys
-    this.anthropicClient = new AnthropicClient(import.meta.env.VITE_ANTHROPIC_API_KEY || 'dummy');
-    this.groqClient = new GroqClient(import.meta.env.VITE_GROQ_API_KEY || 'dummy');
-    this.geminiClient = new GeminiClient(import.meta.env.VITE_GEMINI_API_KEY || 'dummy');
-    this.cohereClient = new CohereClient(import.meta.env.VITE_COHERE_API_KEY || 'dummy');
-
-    this.quasarClient = new QuasarClient(import.meta.env.VITE_OPENROUTER_API_KEY || 'dummy');
+    this.llmClient = new UnifiedLLMClient('quasar-alpha');
 
     this.statutes = statutesData as Statute[];
     this.statutes = statutesData as Statute[];
@@ -173,7 +155,7 @@ class OrchestratorService {
 
   private selectLLM(intent: string): { name: string; client: LLMClient } {
     // Use Quasar Alpha via OpenRouter for all LLM responses
-    return { name: 'QuasarAlpha', client: this.quasarClient };
+    return { name: 'QuasarAlpha', client: this.llmClient };
   }
 
   private async invokeTool(input: OrchestratorInput, intent: string, action: any): Promise<void> {

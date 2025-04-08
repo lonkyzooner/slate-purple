@@ -6,12 +6,22 @@ interface SavedReport {
   content: string;
 }
 
+import { useEffect } from 'react';
+
 const ReportAssistant: React.FC = () => {
   const [reportText, setReportText] = useState('');
   const [feedback, setFeedback] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [savedReports, setSavedReports] = useState<SavedReport[]>([]);
   const [title, setTitle] = useState('');
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   const generateDraft = async () => {
     setLoading(true);
@@ -42,9 +52,11 @@ const ReportAssistant: React.FC = () => {
       }
       const generated = data.choices?.[0]?.message?.content;
       setReportText(generated || 'No report generated.');
+      setToast({ message: 'Draft generated successfully', type: 'success' });
     } catch (error) {
       console.error('Error generating draft:', error);
       setFeedback('Error generating draft: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      setToast({ message: 'Failed to generate draft', type: 'error' });
     }
     setLoading(false);
   };
@@ -79,9 +91,11 @@ const ReportAssistant: React.FC = () => {
       }
       const suggestions = data.choices?.[0]?.message?.content;
       setFeedback(suggestions || 'No suggestions generated.');
+      setToast({ message: 'Report reviewed successfully', type: 'success' });
     } catch (error) {
       console.error('Error reviewing report:', error);
       setFeedback('Error reviewing report: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      setToast({ message: 'Failed to review report', type: 'error' });
     }
     setLoading(false);
   };
@@ -180,6 +194,15 @@ const ReportAssistant: React.FC = () => {
           >
             {loading ? 'Reviewing...' : 'Review Report'}
           </button>
+      {toast && (
+        <div
+          className={`fixed bottom-6 right-6 px-4 py-2 rounded shadow-lg transition-all ${
+            toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
         </div>
       </div>
 
