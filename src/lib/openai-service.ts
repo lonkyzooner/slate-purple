@@ -28,3 +28,58 @@ export async function getChatCompletion(messages: { role: string; content: strin
   const data = await response.json();
   return data.choices?.[0]?.message?.content || '';
 }
+
+export async function processVoiceCommand(transcript: string): Promise<CommandResponse> {
+  const prompt = `
+As LARK (Law Enforcement Assistance and Response Kit), interpret the following police voice command and respond with a JSON object containing:
+{
+  "command": "original command",
+  "action": "miranda|statute|threat|tactical|general_query|unknown",
+  "parameters": {
+    "language": "...",
+    "statute": "...",
+    "threat": "...",
+    "query": "..."
+  }
+}
+
+Transcript: "${transcript}"
+`;
+
+  const reply = await getChatCompletion([
+    { role: 'system', content: 'You are LARK, a police AI assistant.' },
+    { role: 'user', content: prompt }
+  ]);
+
+  try {
+    const parsed = JSON.parse(reply);
+    return { ...parsed, executed: true };
+  } catch {
+    return {
+      command: transcript,
+      action: 'unknown',
+      executed: false,
+      error: 'Failed to parse LLM response'
+    };
+  }
+}
+
+export async function getGeneralKnowledge(query: string): Promise<string> {
+  return getChatCompletion([
+    { role: 'system', content: 'You are LARK, a police AI assistant.' },
+    { role: 'user', content: query }
+  ]);
+}
+
+export async function assessTacticalSituation(situation: string): Promise<string> {
+  const prompt = `
+As LARK, assess the following tactical situation and provide concise, actionable advice for police officers:
+
+"${situation}"
+`;
+
+  return getChatCompletion([
+    { role: 'system', content: 'You are LARK, a tactical police AI assistant.' },
+    { role: 'user', content: prompt }
+  ]);
+}
